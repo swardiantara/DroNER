@@ -70,7 +70,7 @@ def classification(model_type, model_name, train_df, dev_df, test_df):
                      args=model_args, use_cuda=device)
     output_dir = getattr(model_args, "output_dir")
     output_dir = output_dir.replace('outputs', 'ner_results')
-    if os.path.exists(output_dir):
+    if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     # Fine-tune the model using our own dataset
     model.train_model(train_df, eval_data=test_df, acc=accuracy_score)
@@ -137,7 +137,7 @@ def main():
     model_types = ['bert', 'distilbert', 'roberta',
                    'distilroberta', 'electra', 'xlnet']
 
-    if os.path.exists("outputs"):
+    if not os.path.exists("outputs"):
         os.makedirs("outputs")
         os.makedirs("ner_results")
 
