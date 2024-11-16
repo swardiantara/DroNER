@@ -10,7 +10,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 
 def load_dataset(path):
-    train_df = pd.read_csv('{}/train.csv'.format(path), encoding="utf-8")
+    train_df = pd.read_csv('{}/train.csv'.format(path), sep=';')
     dev_df = pd.read_csv('{}/dev.csv'.format(path), encoding="utf-8")
     test_df = pd.read_csv('{}/test.csv'.format(path), encoding="utf-8")
     return train_df, dev_df, test_df
