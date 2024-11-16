@@ -38,14 +38,16 @@ def get_model_args(model_type):
     args = NERArgs()
     model_type, model_name = get_model_name(model_type)
     model_name = model_name.split('/')[-1]
-    args.num_train_epochs = 4
-    args.learning_rate = 0.0001  # 0.0001  5e-5, 3e-5, 2e-5
+    args.num_train_epochs = 10
+    args.learning_rate = 5e-5  # 0.0001  5e-5, 3e-5, 2e-5
     args.overwrite_output_dir = True
-    args.train_batch_size = 8
-    args.eval_batch_size = 8
-    args.max_seq_length = 64
+    args.train_batch_size = 16
+    args.eval_batch_size = 16
+    args.max_seq_length = 128
     args.output_dir = f"outputs/{model_name}"
     args.best_model_dir = f"outputs/{model_name}/best_model"
+    args.save_steps = -1
+    args.save_model_every_epoch = False
 
     return args
 
@@ -135,6 +137,10 @@ def recap_evaluation(outputdir, filename):
 def main():
     model_types = ['bert', 'distilbert', 'roberta',
                    'distilroberta', 'electra', 'xlnet']
+
+    if os.path.exists("outputs"):
+        os.makedirs("outputs")
+        os.makedirs("ner_results")
 
     for model_type in model_types:
 
