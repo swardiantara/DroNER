@@ -70,6 +70,8 @@ def classification(model_type, model_name, train_df, dev_df, test_df):
                      args=model_args, use_cuda=device)
     output_dir = getattr(model_args, "output_dir")
     output_dir = output_dir.replace('outputs', 'ner_results')
+    if os.path.exists(output_dir):
+        os.makedirs(output_dir)
     # Fine-tune the model using our own dataset
     model.train_model(train_df, eval_data=test_df, acc=accuracy_score)
 
@@ -81,9 +83,6 @@ def classification(model_type, model_name, train_df, dev_df, test_df):
     print("\n=> Evaluating the model on Test Dataset...")
     print(result)
     print("\n=> Saving the evaluation results...")
-    # compatible = check_test_data(test_df, preds_list)
-    # if not compatible:
-    #     print('The length of test data and preds data is not compatible')
 
     # Save the evaluation score to .csv files for error analysis
     model_name = model_name.split('/')[-1]
@@ -146,7 +145,6 @@ def main():
 
         model_type, model_name = get_model_name(model_type)
         train_df, dev_df, test_df = load_dataset('dataset')
-        # test_df = test_df.iloc[:100]
 
         train_stat = pd.Series(train_df["labels"].value_counts()).to_frame()
         dev_stat = pd.Series(dev_df["labels"].value_counts()).to_frame()
